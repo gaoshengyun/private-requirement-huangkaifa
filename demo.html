@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>demo</title>
+  <style type="text/css">
+    .address {width: 500px;border: 1px solid #09f;word-break: break-word;}
+    .address span {padding: 4px;margin-right: 5px;}
+    .list, .sub-ul {display: none;}
+  </style>
+</head>
+<body>
+  
+  <div id="app">
+    <div class="address">
+      <p>收件人地址</p>
+      <textarea id="selectedadress" readonly="textarea"></textarea>
+    </div>
+    <input type="button" id="copy" value="复制" />
+    <ul class="list">
+      <li>
+        <input class="checkHandle" type="checkbox" id="1" value=""/><label for="1">123@163.com</label>
+      </li>
+      <li><input class="checkHandle" type="checkbox" id="2" value=""/><label for="2">234@163.com</label></li>
+      <li class="sub-list">
+        <span class="group">群组一(2)</span>
+        <ul class="sub-ul">
+          <li><input class="checkHandle" type="checkbox" id="3" value=""/><label for="3">345@163.com</label></li>
+          <li><input class="checkHandle" type="checkbox" id="4" value=""/><label for="4">456@163.com</label></li>
+          <li><input class="checkHandle" type="checkbox" id="5" value=""/><label for="5">567@163.com</label></li>
+        </ul>
+      </li>
+    </ul>
+   
+      
+    </textarea>
+  </div>
+  
+  <script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.js"></script>
+  <script>
+    $(function () {
+      const address = $('.address') // 收件人div
+      const list = $('.list') // 一级列表
+      const subList = $('.sub-list') // 二级列表
+      const group = $('.group') // 群组
+      const checkboxItem = $('.checkHandle')  // checkbox
+      // 展开一级联系人
+      address.click(function() {
+        list.slideToggle()
+      })
+      // 展开群组
+      group.click(function() {
+        $(this).next('ul').slideToggle()
+      })
+      const arr = []
+      checkboxItem.click(function() {
+        const status = $(this).prop('checked') // 是否选中状态
+        let selectadress = '' // 选中的地址
+        let unselectedadress = '' // 未选中的地址
+        if (status) {
+          selectadress = $(this).next('label').text()
+          arr.push(selectadress)
+        } else {
+          unselectedadress = $(this).next('label').text()
+          const i = arr.findIndex(x => x === unselectedadress)
+          arr.splice(i, 1)
+        }
+        console.log(arr)
+        $('#selectedadress').text(arr.join('; '))
+        
+        // 复制功能
+        $('#copy').click(function(e) {
+          $('#selectedadress')[0].select()
+          document.execCommand("Copy")
+        })
+       
+      })
+    })
+  </script>
+</body>
+</html>
